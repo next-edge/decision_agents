@@ -7,6 +7,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from src.data.gateways.google_adk.agents.adk_agent_gateway import AdkAgentGateway
+from src.data.gateways.google_adk.tools.registry import create_default_registry
 from src.data.repositories.yaml_team_repository import YamlTeamRepository
 from src.domain.services.discussion_service import DiscussionService
 from src.domain.services.report_service import ReportService
@@ -20,7 +21,8 @@ OUTPUT_DIR = PROJECT_ROOT / "outputs"
 def create_usecase() -> RunDiscussionUsecase:
     model = os.environ.get("LLM_MODEL_AGENT", "gemini-2.5-flash")
     team_repository = YamlTeamRepository(TEAMS_DIR)
-    agent_gateway = AdkAgentGateway(model=model)
+    tool_registry = create_default_registry()
+    agent_gateway = AdkAgentGateway(model=model, tool_registry=tool_registry)
     discussion_service = DiscussionService(
         agent_gateway=agent_gateway,
         on_progress=lambda msg: print(msg),

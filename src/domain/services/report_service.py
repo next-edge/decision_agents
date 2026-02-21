@@ -45,16 +45,16 @@ class ReportService:
             lines.append(f"| {member.id} | {member.name} |")
         lines.append("")
 
-        # トポロジー
-        lines.append("### トポロジー")
+        # ステップ構成
+        lines.append("### ステップ構成")
         lines.append("")
-        lines.append("| Phase | 名前 | 参加メンバー | 目的 | ラウンド数 |")
+        lines.append("| Step | 名前 | 参加メンバー | 目的 | ラウンド数 |")
         lines.append("| --- | --- | --- | --- | --- |")
-        for phase in team.topology.phases:
-            members_str = ", ".join(phase.members)
+        for step in team.steps:
+            members_str = ", ".join(step.members)
             lines.append(
-                f"| {phase.id} | {phase.name} | {members_str} "
-                f"| {phase.goal} | {phase.rounds} |"
+                f"| {step.id} | {step.name} | {members_str} "
+                f"| {step.goal} | {step.rounds} |"
             )
         lines.append("")
 
@@ -65,26 +65,26 @@ class ReportService:
             lines.append(log.conclusion)
             lines.append("")
 
-        # 各フェーズの詳細
+        # 各ステップの詳細
         lines.append("---")
         lines.append("")
         lines.append("## 議論の詳細")
         lines.append("")
 
-        for phase_result in log.phase_results:
-            lines.append(f"### {phase_result.phase_name}")
+        for step_result in log.step_results:
+            lines.append(f"### {step_result.step_name}")
             lines.append("")
-            lines.append(f"**目的:** {phase_result.goal}")
+            lines.append(f"**目的:** {step_result.goal}")
             lines.append("")
 
-            if phase_result.conclusion:
-                lines.append(f"#### このフェーズの結論")
+            if step_result.conclusion:
+                lines.append(f"#### このステップの結論")
                 lines.append("")
-                lines.append(phase_result.conclusion)
+                lines.append(step_result.conclusion)
                 lines.append("")
 
             current_round = 0
-            for utterance in phase_result.utterances:
+            for utterance in step_result.utterances:
                 if utterance.round_number != current_round:
                     current_round = utterance.round_number
                     lines.append(f"#### Round {current_round}")

@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 class Utterance:
     """1回の発言を表す。"""
 
-    phase_id: str
+    step_id: str
     round_number: int
     member_id: str
     member_name: str
@@ -15,11 +15,11 @@ class Utterance:
 
 
 @dataclass
-class PhaseResult:
-    """1フェーズの議論結果。"""
+class StepResult:
+    """1ステップの議論結果。"""
 
-    phase_id: str
-    phase_name: str
+    step_id: str
+    step_name: str
     goal: str
     utterances: list[Utterance] = field(default_factory=list)
     conclusion: str = ""
@@ -32,5 +32,5 @@ class DiscussionLog:
     team_id: str
     team_name: str
     topic: str
-    phase_results: list[PhaseResult] = field(default_factory=list)
+    step_results: list[StepResult] = field(default_factory=list)
     conclusion: str = ""

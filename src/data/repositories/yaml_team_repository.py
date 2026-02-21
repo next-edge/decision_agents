@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from src.domain.entities.team import Member, Phase, Team, Topology
+from src.domain.entities.team import Member, Step, Team
 from src.domain.repositories.team_repository import TeamRepository
 
 
@@ -40,16 +40,16 @@ class YamlTeamRepository(TeamRepository):
             for m in data["members"]
         ]
 
-        phases = [
-            Phase(
-                id=p["id"],
-                name=p["name"],
-                members=p["members"],
-                goal=p["goal"],
-                rounds=p.get("rounds", 2),
-                fallback=p.get("fallback"),
+        steps = [
+            Step(
+                id=s["id"],
+                name=s["name"],
+                members=s["members"],
+                goal=s["goal"],
+                rounds=s.get("rounds", 2),
+                fallback=s.get("fallback"),
             )
-            for p in data["topology"]["phases"]
+            for s in data["steps"]
         ]
 
         return Team(
@@ -57,5 +57,5 @@ class YamlTeamRepository(TeamRepository):
             name=data["name"],
             description=data["description"],
             members=members,
-            topology=Topology(phases=phases),
+            steps=steps,
         )

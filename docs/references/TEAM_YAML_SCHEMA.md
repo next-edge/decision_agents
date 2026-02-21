@@ -10,33 +10,27 @@
 | `name` | string | はい | チームの表示名。CLI でのチーム選択時に表示される。 |
 | `description` | string | はい | チームの概要説明。CLI でのチーム選択時に表示される。 |
 | `members` | list[Member] | はい | チームに所属するメンバーのリスト。 |
-| `topology` | Topology | はい | 議論の進め方を定義するトポロジー。 |
+| `steps` | list[Step] | はい | 議論のステップを定義するリスト。定義順に実行される。 |
 
 ## Member
 
 | フィールド | 型 | 必須 | デフォルト | 説明 |
 | --- | --- | --- | --- | --- |
-| `id` | string | はい | - | メンバーの識別子。チーム内でユニークであること。topology の `members` で参照される。 |
+| `id` | string | はい | - | メンバーの識別子。チーム内でユニークであること。steps の `members` で参照される。 |
 | `name` | string | はい | - | メンバーの表示名（例: "CEO（統合意思決定者）"）。レポートや進捗表示で使用される。 |
 | `prompt` | string | はい | - | メンバーの挙動を指示する LLM 用プロンプト。YAML のリテラルブロック（`|`）で複数行記述可能。 |
-| `tools` | list[string] | いいえ | `[]` | メンバーが利用できるツールのリスト。現時点では未使用。 |
+| `tools` | list[string] | いいえ | `[]` | メンバーが利用できるツールの短縮名リスト。利用可能なツール名: `google_search`（Google 検索）。 |
 
-## Topology
-
-| フィールド | 型 | 必須 | 説明 |
-| --- | --- | --- | --- |
-| `phases` | list[Phase] | はい | 議論のフェーズを定義するリスト。定義順に実行される。 |
-
-## Phase
+## Step
 
 | フィールド | 型 | 必須 | デフォルト | 説明 |
 | --- | --- | --- | --- | --- |
-| `id` | string | はい | - | フェーズの識別子。`fallback` で参照される。 |
-| `name` | string | はい | - | フェーズの表示名。レポートや進捗表示で使用される。 |
-| `members` | list[string] | はい | - | このフェーズに参加するメンバーの ID リスト。上位の `members` で定義された ID を参照する。 |
-| `goal` | string | はい | - | このフェーズの議論の目的。エージェントへのシステムコンテキストとして使用される。 |
+| `id` | string | はい | - | ステップの識別子。`fallback` で参照される。 |
+| `name` | string | はい | - | ステップの表示名。レポートや進捗表示で使用される。 |
+| `members` | list[string] | はい | - | このステップに参加するメンバーの ID リスト。上位の `members` で定義された ID を参照する。 |
+| `goal` | string | はい | - | このステップの議論の目的。エージェントへのシステムコンテキストとして使用される。 |
 | `rounds` | int | いいえ | `2` | ラウンド数。1ラウンドで全参加メンバーが1回ずつ発言する。 |
-| `fallback` | string \| null | いいえ | `null` | 検証に耐えられない場合に戻る先の Phase ID。`null` の場合は戻り先なし。現時点では未実装。 |
+| `fallback` | string \| null | いいえ | `null` | 検証に耐えられない場合に戻る先の Step ID。`null` の場合は戻り先なし。現時点では未実装。 |
 
 ## 記述例
 
@@ -58,14 +52,13 @@ members:
     prompt: |
       あなたはスタートアップ企業のCMOです。
       ...
-    tools: []
+    tools: [google_search]
 
-topology:
-  phases:
-    - id: phase1
-      name: "ブレスト"
-      members: [ceo, cmo]
-      goal: "楽観的に初期の事業アイディアをブレスト"
-      rounds: 2
-      fallback: null
+steps:
+  - id: step1
+    name: "ブレスト"
+    members: [ceo, cmo]
+    goal: "楽観的に初期の事業アイディアをブレスト"
+    rounds: 2
+    fallback: null
 ```

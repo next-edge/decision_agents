@@ -1,4 +1,4 @@
-"""チーム・メンバー・トポロジーのエンティティ定義。"""
+"""チーム・メンバー・ステップのエンティティ定義。"""
 
 from dataclasses import dataclass, field
 
@@ -14,8 +14,8 @@ class Member:
 
 
 @dataclass(frozen=True)
-class Phase:
-    """トポロジーの1フェーズを表すエンティティ。"""
+class Step:
+    """議論の1ステップを表すエンティティ。"""
 
     id: str
     name: str
@@ -26,13 +26,6 @@ class Phase:
 
 
 @dataclass(frozen=True)
-class Topology:
-    """チームのトポロジー（議論の進め方）を表すエンティティ。"""
-
-    phases: list[Phase]
-
-
-@dataclass(frozen=True)
 class Team:
     """チーム全体を表すエンティティ。"""
 
@@ -40,4 +33,4 @@ class Team:
     name: str
     description: str
     members: list[Member]
-    topology: Topology
+    steps: list[Step]

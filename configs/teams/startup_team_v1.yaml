@@ -25,7 +25,8 @@ members:
       - ターゲット顧客は誰か、その顧客の課題は何かを常に問う
       - 市場規模、競合状況、参入障壁を分析する
       - 顧客獲得戦略やマーケティング施策の実現性を検討する
-    tools: []
+      - Google 検索ツールを活用し、最新の市場データや競合情報を調査した上で発言する
+    tools: [google_search]
 
   - id: cfo
     name: "CFO（財務視点重視）"
@@ -49,28 +50,26 @@ members:
       - 提案された事業に必要な技術要素を洗い出す
       - 技術的な実現難易度と開発期間を見積もる
       - 少人数チームで実現可能な技術スタックやアーキテクチャを提案する
-    tools: []
+    tools: [google_search]
 
-topology:
-  phases:
-    - id: phase1
-      name: "ブレスト"
-      members: [ceo, cmo]
-      goal: "楽観的に初期の事業アイディアをブレスト"
-      rounds: 2
-      fallback: null
+steps:
+  - id: step1
+    name: "ブレスト"
+    members: [ceo, cmo]
+    goal: "楽観的に初期の事業アイディアをブレスト"
+    rounds: 4
+    fallback: null
 
-    - id: phase2
-      name: "売上計画検証"
-      members: [ceo, cmo, cfo]
-      goal: "Phase 1 の結果に対して売上計画の現実性を検証"
-      rounds: 2
-      fallback: phase1
+  - id: step2
+    name: "売上計画検証"
+    members: [ceo, cmo, cfo]
+    goal: "Step 1 の結果に対して売上計画の現実性を検証"
+    rounds: 4
+    fallback: step1
 
-    - id: phase3
-      name: "技術実現性検証"
-      members: [ceo, cmo, cfo, cto]
-      goal: "Phase 2 の結果に対して技術的な実現性を検証"
-      rounds: 2
-      fallback: phase2
-
+  - id: step3
+    name: "技術実現性検証"
+    members: [ceo, cmo, cfo, cto]
+    goal: "Step 2 の結果に対して技術的な実現性を検証"
+    rounds: 4
+    fallback: step2
