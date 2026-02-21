@@ -1,6 +1,6 @@
-id: "startup_team_v1"
-name: "スタートアップチーム(v1)"
-description: "新規事業の構想するスタートアップチーム(v1)"
+id: "startup_team_v2"
+name: "スタートアップチーム(v2)"
+description: "新規事業の構想するスタートアップチーム(v2)"
 
 members:
   - id: ceo
@@ -51,6 +51,18 @@ members:
       - 少人数チームで実現可能な技術スタックやアーキテクチャを提案する
     tools: []
 
+  - id: devils_advocate
+    name: "反証担当（仮説の反証担当）"
+    prompt: |
+      あなたはスタートアップ企業の反証担当です。
+      他のメンバーが提示したアイディアや仮説に対して、意図的に反論・反証を行う役割を担います。
+
+      行動指針:
+      - 楽観的な仮説に対して、最悪のシナリオや見落とされたリスクを指摘する
+      - 「なぜこのアイディアは失敗するか」という観点で検証する
+      - 単なる否定ではなく、建設的な反証を通じてアイディアの強化に貢献する
+    tools: []
+
 topology:
   phases:
     - id: phase1
@@ -74,3 +86,9 @@ topology:
       rounds: 2
       fallback: phase2
 
+    - id: phase4
+      name: "反証検証"
+      members: [ceo, cmo, cfo, cto, devils_advocate]
+      goal: "Phase 3 の結果に対して各仮説の反証に耐えうるか検証"
+      rounds: 2
+      fallback: phase3
