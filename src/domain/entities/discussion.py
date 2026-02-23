@@ -15,14 +15,36 @@ class Utterance:
 
 
 @dataclass
+class QualityEvaluation:
+    """品質評価の結果。"""
+
+    is_passed: bool
+    fallback_target_step_id: str | None = None
+    reason: str = ""
+
+
+@dataclass
 class StepResult:
     """1ステップの議論結果。"""
 
     step_id: str
     step_name: str
-    goal: str
+    description: str
+    output: str = ""
     utterances: list[Utterance] = field(default_factory=list)
     conclusion: str = ""
+
+
+@dataclass
+class FallbackEvent:
+    """品質差し戻しの記録。"""
+
+    failed_step_id: str
+    failed_step_name: str
+    fallback_target_step_id: str
+    failed_conclusion: str
+    reason: str = ""
+    failed_step_results: list[StepResult] = field(default_factory=list)
 
 
 @dataclass
@@ -33,4 +55,5 @@ class DiscussionLog:
     team_name: str
     topic: str
     step_results: list[StepResult] = field(default_factory=list)
+    fallback_events: list[FallbackEvent] = field(default_factory=list)
     conclusion: str = ""

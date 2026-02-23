@@ -5,6 +5,7 @@ description = "スタートアップ企業の意思決定を支援するマル�
 requires-python = ">=3.12"
 dependencies = [
     "google-adk",
+    "prompt-toolkit>=3.0.52",
 ]
 
 [build-system]

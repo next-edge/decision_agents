@@ -56,20 +56,26 @@ steps:
   - id: step1
     name: "ブレスト"
     members: [ceo, cmo]
-    goal: "楽観的に初期の事業アイディアをブレスト"
+    description: "楽観的に初期の事業アイディアをブレスト"
+    output: "初期事業アイディアのリスト（各アイディアの概要・ターゲット顧客・想定される価値提案）"
+    prompt: "自由な発想でアイディアを出すことを優先し、批判は控える。各メンバーは自身の専門的視点から可能性を広げる提案を行うこと。"
     rounds: 4
     fallback: null
 
   - id: step2
     name: "売上計画検証"
     members: [ceo, cmo, cfo]
-    goal: "Step 1 の結果に対して売上計画の現実性を検証"
+    description: "Step 1 の結果に対して売上計画の現実性を検証"
+    output: "各アイディアの売上モデル・コスト構造・損益分岐点の概算"
+    prompt: "新規参加メンバー（CFO）の専門的視点を優先的に取り入れること。各アイディアに対して具体的な数値を用いて検証する。楽観・悲観シナリオの両面を考慮すること。"
     rounds: 4
-    fallback: step1
+    fallback: [step2, step1]
 
   - id: step3
     name: "技術実現性検証"
     members: [ceo, cmo, cfo, cto]
-    goal: "Step 2 の結果に対して技術的な実現性を検証"
+    description: "Step 2 の結果に対して技術的な実現性を検証"
+    output: "各アイディアの技術要件・開発期間見積もり・技術的リスクの一覧"
+    prompt: "新規参加メンバー（CTO）の専門的視点を優先的に取り入れること。少人数チームで実現可能かを軸に、技術スタック・アーキテクチャ・開発優先度を議論すること。"
     rounds: 4
-    fallback: step2
+    fallback: [step3, step2]

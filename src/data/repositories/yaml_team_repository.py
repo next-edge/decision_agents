@@ -11,6 +11,17 @@ from src.domain.repositories.team_repository import TeamRepository
 class YamlTeamRepository(TeamRepository):
     """configs/teams/ 配下の YAML ファイルからチーム定義を読み込む。"""
 
+    @staticmethod
+    def _normalize_fallback(raw: str | list[str] | None) -> list[str]:
+        """fallback フィールドを list[str] に正規化する（後方互換）。"""
+        if raw is None:
+            return []
+        if isinstance(raw, str):
+            return [raw]
+        if isinstance(raw, list):
+            return raw
+        raise ValueError(f"fallback の形式が不正です: {raw!r}")
+
     def __init__(self, teams_dir: str | Path) -> None:
         self._teams_dir = Path(teams_dir)
 
@@ -45,9 +56,11 @@ class YamlTeamRepository(TeamRepository):
                 id=s["id"],
                 name=s["name"],
                 members=s["members"],
-                goal=s["goal"],
+                description=s["description"],
+                output=s.get("output", ""),
+                prompt=s.get("prompt", ""),
                 rounds=s.get("rounds", 2),
-                fallback=s.get("fallback"),
+                fallback=self._normalize_fallback(s.get("fallback")),
             )
             for s in data["steps"]
         ]

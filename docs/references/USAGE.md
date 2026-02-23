@@ -113,6 +113,8 @@ YAML のスキーマについては [チーム定義 YAML スキーマリファ�
 | プロンプトの変更 | `members[].prompt` | 各メンバーの振る舞いを指示するプロンプト |
 | ツールの付与 | `members[].tools` | メンバーが利用できるツール（例: `[google_search]`） |
 | Step の構成 | `steps` | 議論の段階・参加メンバー・目的を定義 |
+| 期待されるアウトプット | `steps[].output` | 各 Step で期待される成果物の形式を定義 |
+| 議論の方針 | `steps[].prompt` | 各 Step での議論の進め方を指示 |
 | ラウンド数 | `steps[].rounds` | 各 Step で何ラウンド議論するか（デフォルト: 2） |
 | LLM モデル | `.env` の `LLM_MODEL_AGENT` | 使用する Gemini モデルを切り替え |
 

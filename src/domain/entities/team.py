@@ -20,9 +20,11 @@ class Step:
     id: str
     name: str
     members: list[str]
-    goal: str
+    description: str
+    output: str = ""
+    prompt: str = ""
     rounds: int = 2
-    fallback: str | None = None
+    fallback: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

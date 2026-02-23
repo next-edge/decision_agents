@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from prompt_toolkit import prompt as pt_prompt
 
 from src.data.gateways.google_adk.agents.adk_agent_gateway import AdkAgentGateway
 from src.data.gateways.google_adk.tools.registry import create_default_registry
@@ -57,24 +58,29 @@ def select_team(usecase: RunDiscussionUsecase) -> str:
 
 def input_topic() -> str:
     print("\n=== 議題入力 ===")
+    print("（複数行入力可。確定: Alt+Enter / Esc→Enter）")
     while True:
-        topic = input("議論してほしい議題を入力してください: ").strip()
+        topic = pt_prompt("議題> ", multiline=True).strip()
         if topic:
             return topic
         print("議題を入力してください。")
 
 
-async def main() -> None:
+async def run_discussion(usecase: RunDiscussionUsecase, team_id: str, topic: str) -> None:
+    print(f"\n議論を開始します...\n")
+    report_path = await usecase.execute(team_id, topic)
+    print(f"\n議論が完了しました。レポートを出力しました: {report_path}")
+
+
+def main() -> None:
     load_dotenv()
     usecase = create_usecase()
 
     team_id = select_team(usecase)
     topic = input_topic()
 
-    print(f"\n議論を開始します...\n")
-    report_path = await usecase.execute(team_id, topic)
-    print(f"\n議論が完了しました。レポートを出力しました: {report_path}")
+    asyncio.run(run_discussion(usecase, team_id, topic))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

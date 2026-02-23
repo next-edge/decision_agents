@@ -44,9 +44,18 @@ def test_members(repo: YamlTeamRepository) -> None:
 def test_steps(repo: YamlTeamRepository) -> None:
     team = repo.get_team("startup_team_v1")
     steps = team.steps
-    assert steps[0].fallback is None
-    assert steps[1].fallback == "step1"
-    assert steps[2].fallback == "step2"
+    assert steps[0].fallback == []
+    assert steps[1].fallback == ["step2", "step1"]
+    assert steps[2].fallback == ["step3", "step2"]
     assert steps[2].members == ["ceo", "cmo", "cfo", "cto"]
     for step in steps:
         assert step.rounds == 4
+        assert step.output != ""
+        assert step.prompt != ""
+
+
+def test_normalize_fallback() -> None:
+    """_normalize_fallback が各入力形式を正しく変換する。"""
+    assert YamlTeamRepository._normalize_fallback(None) == []
+    assert YamlTeamRepository._normalize_fallback("step1") == ["step1"]
+    assert YamlTeamRepository._normalize_fallback(["a", "b"]) == ["a", "b"]
