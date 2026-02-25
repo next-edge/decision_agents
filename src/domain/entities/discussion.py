@@ -1,6 +1,7 @@
 """議論の記録を表すエンティティ定義。"""
 
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
@@ -57,3 +58,5 @@ class DiscussionLog:
     step_results: list[StepResult] = field(default_factory=list)
     fallback_events: list[FallbackEvent] = field(default_factory=list)
     conclusion: str = ""
+    started_at: datetime | None = None
+    finished_at: datetime | None = None

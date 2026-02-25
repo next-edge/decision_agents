@@ -1,6 +1,7 @@
 """ステップ構成に沿った議論フローを制御するドメインサービス。"""
 
 from collections.abc import Callable
+from datetime import datetime
 
 from src.domain.agents.agent import AgentGateway
 from src.domain.entities.discussion import (
@@ -32,6 +33,7 @@ class DiscussionService:
             team_id=team.id,
             team_name=team.name,
             topic=topic,
+            started_at=datetime.now(),
         )
 
         members_map = {m.id: m for m in team.members}
@@ -154,6 +156,7 @@ class DiscussionService:
         self._on_progress("全体の結論を要約中...")
         log.conclusion = await self._generate_overall_conclusion(log)
 
+        log.finished_at = datetime.now()
         return log
 
     async def _run_step(

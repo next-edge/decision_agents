@@ -16,17 +16,29 @@ class ReportService:
 
     def save(self, log: DiscussionLog, team: Team) -> Path:
         """レポートを生成してファイルに保存し、出力パスを返す。"""
-        content = self._render(log, team)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        now = datetime.now()
+        content = self._render(log, team, now)
+        timestamp = now.strftime("%Y%m%d_%H%M%S")
         filename = f"{log.team_id}_{timestamp}.md"
         path = self._output_dir / filename
         path.write_text(content, encoding="utf-8")
         return path
 
-    def _render(self, log: DiscussionLog, team: Team) -> str:
+    def _render(self, log: DiscussionLog, team: Team, now: datetime) -> str:
         lines: list[str] = []
         lines.append(f"# 議論レポート: {log.team_name}")
         lines.append("")
+        lines.append(f"**生成日時:** {now.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append("")
+        if log.started_at and log.finished_at:
+            elapsed = log.finished_at - log.started_at
+            total_seconds = int(elapsed.total_seconds())
+            minutes, seconds = divmod(total_seconds, 60)
+            if minutes > 0:
+                lines.append(f"**所要時間:** {minutes}分{seconds}秒")
+            else:
+                lines.append(f"**所要時間:** {seconds}秒")
+            lines.append("")
         lines.append(f"**議題:** {log.topic}")
         lines.append("")
 
