@@ -4,6 +4,7 @@
 """
 
 import asyncio
+import os
 
 from dotenv import load_dotenv
 from google.adk import Agent, Runner
@@ -14,9 +15,12 @@ from google.genai import types
 async def main():
     load_dotenv()
 
+    model = os.environ.get("LLM_MODEL_AGENT", "gemini-2.5-flash")
+    print(f"--- モデル: {model} ---")
+
     agent = Agent(
         name="hello_agent",
-        model="gemini-2.5-flash",
+        model=model,
         instruction="あなたは親切なアシスタントです。日本語で簡潔に応答してください。",
     )
 
